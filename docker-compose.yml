@@ -1,0 +1,24 @@
+services:
+  api:
+    build: ./backend
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./backend:/app
+      - hub-data:/app/data
+    environment:
+      - DB_PATH=/app/data/thaqicore_hub.db
+    command: uvicorn main:app --host 0.0.0.0 --port 8001
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api
+
+volumes:
+  hub-data:
